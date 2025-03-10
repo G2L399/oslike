@@ -4,8 +4,8 @@ import { NotebookTabs } from "lucide-react";
 import Image from "next/image";
 
 function Taskbar() {
-  const today = new Date();
   function startTime() {
+    const today = new Date();
     const h = today.getHours().toString().padStart(2, "0");
     const m = today.getMinutes().toString().padStart(2, "0");
     const s = today.getSeconds().toString().padStart(2, "0");
