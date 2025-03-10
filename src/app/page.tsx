@@ -6,8 +6,6 @@ import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
 
 const gridSize = 100;
-
-const snapToGrid = createSnapModifier(gridSize);
 function Draggable({
   position,
 }: {
@@ -18,12 +16,15 @@ function Draggable({
       id: "draggable",
     });
   console.log(isDragging);
+  console.log(CSS.Translate.toString(transform));
+  const transformedStyle = CSS.Translate.toString(transform);
 
   const style = {
-    transform: CSS.Translate.toString(transform),
+    transform: transformedStyle,
     left: `${position.x}px`,
     top: `${position.y}px`,
     opacity: isDragging ? 0.8 : 1,
+    touchAction: "none",
   };
 
   return (
@@ -34,8 +35,11 @@ function Draggable({
       )}
       style={{
         position: "absolute",
+
         width: isDragging ? 110 : 100,
         height: isDragging ? 110 : 100,
+        // width: 100,
+        // height: 100,
         backgroundColor: "#4A90E2",
         color: "white",
         ...style,
@@ -56,11 +60,12 @@ export default function App() {
     scaleY: 1,
   });
   const onDragEnd = (event: DragEndEvent) => {
-    console.log(event);
-    // Update position state with the final displacement
+    const { delta } = event;
+    const x = Math.round((position.x + delta.x) / gridSize) * gridSize;
+    const y = Math.round((position.y + delta.y) / gridSize) * gridSize;
     setPosition({
-      x: position.x + event.delta.x,
-      y: position.y + event.delta.y,
+      x,
+      y,
       scaleX: position.scaleX,
       scaleY: position.scaleY,
     });
